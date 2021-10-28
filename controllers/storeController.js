@@ -32,7 +32,14 @@ exports.resize = async (req, res, next) => {
     next(); // skip to the next middleware
     return;
   }
-  console.log(req.file);
+  const extension  = req.file.mimetype.split('/')[1];
+  req.body.photo = `${uuid.v4()}.${extension}`;
+  // now we resize
+  const photo = await jimp.read(req.file.buffer);
+  await photo.resize(800, jimp.AUTO);
+  await photo.write(`./public/uploads/${req.body.photo}`);
+  // once we have written the photo to our filesystem, keep going!
+  next();
 };
 
 exports.createStore = async (req, res) => {
@@ -48,7 +55,6 @@ exports.getStores = async (req, res) => {
 
 exports.editStore = async (req, res) => {
   // 1. Find the store given the ID
-  console.log(req.params.id);
   const store = await Store.findOne({ _id: req.params.id })
   // 2. Confirm they are the owner of the store
   // 3. Render out the edit form so the user can update their store
