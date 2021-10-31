@@ -88,9 +88,3 @@ exports.getStoresByTag = async (req, res) =>{
   const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
   res.render('tag', { tags, title: 'Tags', tag, stores });
 };
-
-
-
-
-
-
