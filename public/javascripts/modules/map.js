@@ -39,7 +39,11 @@ function loadPlaces(map, lat = 43.2, lng = -79.8) {
           </div>
         `;
         infoWindow.setContent(html);
-        infoWindow.open(map, this);
+        infoWindow.open({
+          anchor: marker,
+          map,
+          shouldFocus: false,
+        });
       }));
 
       // then zoom the map to fit all the markers perfectly
